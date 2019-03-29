@@ -10,13 +10,38 @@ then
         echo "wrong version"
     fi
 else
-    sudo yum -y install -y yum-utils device-mapper-persistent-data lvm2
-    sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    sudo yum makecache fast
-    yum install -y --setopt=obsoletes=0 docker-ce-17.03.1.ce-1.el7.centos docker-ce-selinux-17.03.1.ce-1.el7.centos
-    sudo mkdir -p /etc/docker/
-    sudo touch /etc/docker/daemon.json
-    echo "{\"storage-driver\": \"devicemapper\"}" | sudo tee /etc/docker/daemon.json
-    sudo systemctl start docker
-    sudo /etc/init.d/ds_agent stop || true
+    yum install yum-utils device-mapper-persistent-data lvm2
+
+    ### Add docker repository.
+    yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo
+
+    ## Install docker ce.
+    yum -y update && sudo yum -y install docker-ce-18.06.2.ce
+
+    ## Create /etc/docker directory.
+    mkdir /etc/docker
+
+    # Setup daemon.
+    cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+    
+    mkdir -p /etc/systemd/system/docker.service.d
+
+    # Restart docker.
+    systemctl daemon-reload
+    systemctl restart docker
+    systemctl enable docker.service
 fi
