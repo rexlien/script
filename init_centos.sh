@@ -10,7 +10,7 @@ then
         echo "wrong version"
     fi
 else
-    yum install yum-utils device-mapper-persistent-data lvm2
+    yum -y install yum-utils device-mapper-persistent-data lvm2
 
     ### Add docker repository.
     yum-config-manager \
