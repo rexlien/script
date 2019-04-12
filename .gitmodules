@@ -1,0 +1,3 @@
+[submodule "k8s/local-provisioner"]
+	path = k8s/local-provisioner
+	url = https://github.com/rexlien/sig-storage-local-static-provisioner.git
