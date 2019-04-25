@@ -1,0 +1,1 @@
+go get github.com/google/go-jsonnet/cmd/jsonnet
