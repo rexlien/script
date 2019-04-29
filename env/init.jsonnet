@@ -23,5 +23,11 @@ local property = import "env/property.libsonnet";
     #!/bin/bash
     mysql -h 127.0.0.1 -P 3306 -uroot -p%(pw)s %(project_name)s < %(import_file)s
   ||| % {project_name: property.project_name, import_file: property.mysql_import_file, pw: property.mysql_root_pw},
-  
+
+ 'init_redis.sh': |||
+    #!/bin/bash
+    helm del --purge %(project_name)s-redis
+    helm install --name %(project_name)s-redis --namespace %(project_name)s --set master.service.nodePort=%(node_port)d,password=%(pw)s,master.service.type=NodePort stable/redis
+  ||| % {project_name : property.project_name, node_port: property.redis_nodePort, pw : property.redis_pw},
+
 }
