@@ -1,5 +1,5 @@
 
-local property = import "env/property.libsonnet";
+local property = import "property.libsonnet";
 local nodePortUtil = import "node_port_service.libsonnet";
 local kube = import "kube.libsonnet";
 
@@ -25,7 +25,7 @@ local kube = import "kube.libsonnet";
 
   'mysql_node_port.yaml': std.manifestYamlDoc(
   
-       nodePortUtil.NodePortService(property.project_name + "-sql-port", "gu-mysql", property.project_name, 3306, 30000),
+       nodePortUtil.NodePortService(property.project_name + "-sql-port", property.project_name + "-mysql", property.project_name, 3306, 30000),
   
     ),
   
