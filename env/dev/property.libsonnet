@@ -19,4 +19,5 @@
     mongo_nameSpace : "test-mongo",
     //mongo_nodeSelector : "mongo",
     mongo_nodePort : 30002,
+    mongo_storageClass : "fast-disks",
 }

@@ -8,6 +8,11 @@ local property = import "property.libsonnet";
             nodePort: property.mongo_nodePort,
             type : "NodePort",
         },
+        persistence: 
+        {
+            storageClass : property.mongo_storageClass
+        },
+
        
     } + (if std.objectHas(property, "mongo_nodeSelector") then 
             {   nodeSelector : 
