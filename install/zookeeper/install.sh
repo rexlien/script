@@ -9,6 +9,7 @@ wget http://apache.stu.edu.tw/zookeeper/stable/apache-zookeeper-3.5.5-bin.tar.gz
 mkdir zookeeper
 tar -xvzf apache-zookeeper-3.5.5-bin.tar.gz -C zookeeper
 chmod 777 ./zookeeper/apache-zookeeper-3.5.5-bin/conf
+rm ./zookeeper/apache-zookeeper-3.5.5-bin/conf/zoo.cfg | true
 cat >> ./zookeeper/apache-zookeeper-3.5.5-bin/conf/zoo.cfg <<EOF
 tickTime=2000
 dataDir=./zookeeper-data/data
