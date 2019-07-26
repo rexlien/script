@@ -1,14 +1,17 @@
 #!/bin/bash
 
 BROKDER_ID=$1
-HOST_IP=$2
-LOG_DIR=$3
+HOST_IP=$(hostname -I | cut -d" " -f 1)
+LOG_DIR=$2
 
-git clone https://github.com/rexlien/kafka.git | true
+export PATH=$PATH:/opt/gradle/gradle-5.5.1/bin
+
+git clone https://github.com/rexlien/kafka.git
 cd kafka
 git branch 2.2
 git pull
-./gradlew srcjar
+gradle
+./gradlew jar
 cd ..
 rm ./kafka_config.properties | true
 cat >> ./kafka_config.properties <<EOF
@@ -150,5 +153,4 @@ zookeeper.connection.timeout.ms=6000
 group.initial.rebalance.delay.ms=0
 EOF
 sh ./kafka/bin/kafka-server-stop.sh
-JMX_PORT=9999 
-sh ./kafka/bin/kafka-server-start.sh ./kafka_config.properties
+JMX_PORT=9999 sh ./kafka/bin/kafka-server-start.sh ./kafka_config.properties
