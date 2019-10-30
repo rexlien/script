@@ -4,3 +4,6 @@
 [submodule "go/src/sigs.k8s.io/sig-storage-local-static-provisioner"]
 	path = go/src/sigs.k8s.io/sig-storage-local-static-provisioner
 	url = https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner.git
+[submodule "go/src/k8s.io/kubernetes"]
+	path = go/src/k8s.io/kubernetes
+	url = /Users/line/projects/script/go/src/k8s.io/kubernetes
