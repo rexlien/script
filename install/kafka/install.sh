@@ -1,20 +1,32 @@
 #!/bin/bash
+set -euo pipefail
 
-BROKDER_ID=$1
-HOST_IP=$(hostname -I | cut -d" " -f 1)
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+
+BROKER_ID=$1
+if [[ "$machine" == "Mac" ]]; then
+    HOST_IP=127.0.0.1
+else
+    HOST_IP=$(hostname -I | cut -d" " -f 1)
+fi
+
 LOG_DIR=$2
 
-export PATH=$PATH:/opt/gradle/gradle-5.5.1/bin
 
-git clone https://github.com/rexlien/kafka.git
+git clone https://github.com/rexlien/kafka.git || true
 cd kafka
-git branch 2.2
+git checkout 2.3-2 || true
 git pull
-gradle
-./gradlew jar
 cd ..
-rm ./kafka_config.properties | true
-cat >> ./kafka_config.properties <<EOF
+rm ./kafka-config.properties || true
+cat >> ./kafka-config.properties <<EOF
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -35,7 +47,7 @@ cat >> ./kafka_config.properties <<EOF
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-broker.id=${BROKDER_ID}
+broker.id=${BROKER_ID}
 
 ############################# Socket Server Settings #############################
 
@@ -152,5 +164,5 @@ zookeeper.connection.timeout.ms=6000
 # However, in production environments the default value of 3 seconds is more suitable as this will help to avoid unnecessary, and potentially expensive, rebalances during application startup.
 group.initial.rebalance.delay.ms=0
 EOF
-sh ./kafka/bin/kafka-server-stop.sh
-JMX_PORT=9999 sh ./kafka/bin/kafka-server-start.sh ./kafka_config.properties
+sh ./kafka/bin/kafka-server-stop.sh || true
+JMX_PORT=9999 sh ./kafka/bin/kafka-server-start.sh ./kafka-config.properties
