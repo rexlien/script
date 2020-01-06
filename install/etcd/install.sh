@@ -13,12 +13,12 @@ HOST_2=$3
 HOST_3=$4
 HOST_IP=$(hostname -I | cut -d" " -f 1)
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
-
+BASEDIR=$(dirname "$0")
 
 cat >> /etc/etcd/etcd.conf <<EOF
 #[Member]
 #ETCD_CORS=""
-ETCD_DATA_DIR="etcd-data"
+ETCD_DATA_DIR="${BASEDIR}/etcd-data"
 #ETCD_WAL_DIR=""
 ETCD_LISTEN_PEER_URLS="http://${HOST_IP}:2380"
 ETCD_LISTEN_CLIENT_URLS="http://${HOST_IP}:2379"
