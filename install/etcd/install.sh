@@ -17,7 +17,7 @@ CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3
 cat > /etc/etcd/etcd.conf <<EOF
 #[Member]
 #ETCD_CORS=""
-ETCD_DATA_DIR="${PWD}/etcd-data"
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
 #ETCD_WAL_DIR=""
 ETCD_LISTEN_PEER_URLS="http://${HOST_IP}:2380"
 ETCD_LISTEN_CLIENT_URLS="http://${HOST_IP}:2379"
