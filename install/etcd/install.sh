@@ -14,7 +14,7 @@ HOST_3=$4
 HOST_IP=$(hostname -I | cut -d" " -f 1)
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
 
-cat >> /etc/etcd/etcd.conf <<EOF
+cat > /etc/etcd/etcd.conf <<EOF
 #[Member]
 #ETCD_CORS=""
 ETCD_DATA_DIR="${PWD}/etcd-data"
