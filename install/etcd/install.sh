@@ -1,7 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-yum install -y etcd
+yum install -y etcd || true
+yum -y install -y go || true
+git clone https://github.com/rexlien/etcd.git || true
+git checkout release-3.4
+cd etcd
+./build
+mv ./bin/etcd /usr/bin/etcd
+
+##yum install -y etcd
 
 TOKEN=token-01
 NAME_1=machine-1
@@ -13,6 +21,27 @@ HOST_2=$3
 HOST_3=$4
 HOST_IP=$(hostname -I | cut -d" " -f 1)
 CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
+
+cat > /usr/lib/systemd/system/etcd.service <<EOF
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/etcd/
+EnvironmentFile=-/etc/etcd/etcd.conf
+User=etcd
+# set GOMAXPROCS to number of processors
+ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) /usr/bin/etcd"
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
 
 cat > /etc/etcd/etcd.conf <<EOF
 #[Member]
@@ -85,6 +114,7 @@ ETCD_INITIAL_CLUSTER_STATE="new"
 #[Auth]
 #ETCD_AUTH_TOKEN="simple"
 EOF
+systemctl daemon-reload
 systemctl stop etcd
 systemctl enable etcd
 systemctl start etcd
