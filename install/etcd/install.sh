@@ -4,8 +4,8 @@ set -euo pipefail
 yum install -y etcd || true
 yum -y install -y go || true
 git clone https://github.com/rexlien/etcd.git || true
-git checkout release-3.4
 cd etcd
+git checkout release-3.4
 ./build
 mv ./bin/etcd /usr/bin/etcd
 
