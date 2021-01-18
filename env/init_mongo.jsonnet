@@ -7,11 +7,8 @@ local property = import "property.libsonnet";
         {
             nodePort: property.mongo_nodePort,
             type : "NodePort",
-        },
-        persistence: 
-        {
-            storageClass : property.mongo_storageClass
-        },
+        }
+    
 
        
     } + (if std.objectHas(property, "mongo_nodeSelector") then 
@@ -24,11 +21,21 @@ local property = import "property.libsonnet";
 
             }
         )
+    + (if std.objectHas(property, "mongo_storageClass") then
+        {
+             persistence: 
+            {
+                storageClass : property.mongo_storageClass
+            }
+        } else {
+
+        }
+        )
     ),
     
     "init_mongo.sh" : |||
         #!/bin/bash
-        helm del --purge %(project_name)s-mongo
-        helm install -f ./mongo_value.yaml --name %(project_name)s-mongo --namespace %(project_name)s stable/mongodb   
+        helm del %(project_name)s-mongo -n %(project_name)s
+        helm install -f ./mongo_value.yaml %(project_name)s-mongo --namespace %(project_name)s stable/mongodb   
     ||| % {project_name: property.project_name},
 }

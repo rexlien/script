@@ -1,1 +1,1 @@
-jsonnet script/env/init.jsonnet -m jsnet_out/ -J . -S
+jsonnet script/env/init.jsonnet -m jsnet_out/ -J ./script/env/dev -S
