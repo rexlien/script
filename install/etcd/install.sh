@@ -5,7 +5,7 @@ yum install -y etcd || true
 #yum -y install -y go || true
 wget https://golang.org/dl/go1.16.9.linux-amd64.tar.gz
 tar -xzf go1.16.9.linux-amd64.tar.gz
-mv go /usr/local
+mv -f go /usr/local
 export GOROOT=/usr/local/go
 export PATH=$GOROOT/bin:$PATH 
 
@@ -13,7 +13,7 @@ git clone https://github.com/rexlien/etcd.git || true
 cd etcd
 git checkout release-3.4
 ./build
-mv ./bin/etcd /usr/bin/etcd
+mv -f ./bin/etcd /usr/bin/etcd
 
 ##yum install -y etcd
 
