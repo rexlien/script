@@ -19,8 +19,10 @@ HOST_NAME=$1
 HOST_1=$2
 HOST_2=$3
 HOST_3=$4
+COMPACT_MODE=$5
+COMPACT_RETENTION=$6
 HOST_IP=$(hostname -I | cut -d" " -f 1)
-CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
+#CLUSTER=${NAME_1}=http://${HOST_1}:2380,${NAME_2}=http://${HOST_2}:2380,${NAME_3}=http://${HOST_3}:2380
 
 cat > /usr/lib/systemd/system/etcd.service <<EOF
 [Unit]
@@ -105,7 +107,8 @@ ETCD_INITIAL_CLUSTER_STATE="new"
 #
 #[Version]
 #ETCD_VERSION="false"
-#ETCD_AUTO_COMPACTION_RETENTION="0"
+ETCD_AUTO_COMPACTION_RETENTION="${COMPACT_RETENTION}"
+ETCD_AUTO_COMPACTION_MODE="${COMPACT_MODE}"
 #
 #[Profiling]
 #ETCD_ENABLE_PPROF="false"
