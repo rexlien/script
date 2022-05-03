@@ -15,7 +15,7 @@ local kube = import "kube.libsonnet";
     #!/bin/bash
     helm del %(project_name)s-mysql -n %(project_name)s
     sleep 3
-    helm install --wait -f ./mysql_value.yaml %(project_name)s-mysql --namespace %(project_name)s stable/mysql
+    helm install --wait -f ./mysql_value.yaml %(project_name)s-mysql --namespace %(project_name)s --create-namespace stable/mysql
     kubectl get service -n %(project_name)s
     kubectl apply -f mysql_node_port.yaml
     ##until kubectl port-forward svc/%(project_name)s-mysql 3306 -n %(project_name)s; do
@@ -38,7 +38,7 @@ local kube = import "kube.libsonnet";
  'init_redis.sh': |||
     #!/bin/bash
     helm del %(project_name)s-redis -n %(project_name)s
-    helm install %(project_name)s-redis --namespace %(project_name)s --set master.service.nodePort=%(node_port)d,password=%(pw)s,master.service.type=NodePort stable/redis
+    helm install %(project_name)s-redis --namespace %(project_name)s --create-namespace --set master.service.nodePort=%(node_port)d,password=%(pw)s,master.service.type=NodePort stable/redis
   ||| % {project_name : property.project_name, node_port: property.redis_nodePort, pw : property.redis_pw},
 
 }

@@ -36,6 +36,6 @@ local property = import "property.libsonnet";
     "init_mongo.sh" : |||
         #!/bin/bash
         helm del %(project_name)s-mongo -n %(project_name)s
-        helm install -f ./mongo_value.yaml %(project_name)s-mongo --namespace %(project_name)s stable/mongodb   
+        helm install -f ./mongo_value.yaml %(project_name)s-mongo --namespace %(project_name)s --create-namespace stable/mongodb   
     ||| % {project_name: property.project_name},
 }
