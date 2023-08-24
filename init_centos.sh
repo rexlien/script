@@ -35,9 +35,15 @@ else
   "storage-opts": [
     "overlay2.override_kernel_check=true"
   ]
-}
 EOF
-    
+    if [[ -z "${XLN_DOCKER_MIRROR_REIGSTRY}" ]]; then
+      cat > /etc/docker/daemon.json <<EOF
+        "registry-mirrors": ["$XLN_DOCKER_MIRROR_REIGSTRY"]
+EOF
+    fi
+    cat > /etc/docker/daemon.json <<EOF
+  }
+EOF
     mkdir -p /etc/systemd/system/docker.service.d
 
     # Restart docker.
