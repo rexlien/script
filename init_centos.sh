@@ -21,7 +21,7 @@ else
     yum -y update && sudo yum -y install docker-ce-3:24.0.5-1.el8 docker-ce-cli-1:24.0.5-1.el8 containerd.io docker-buildx-plugin docker-compose-plugin
 
     ## Create /etc/docker directory.
-    mkdir /etc/docker
+    #mkdir /etc/docker
 
     # Setup daemon.
     cat > /etc/docker/daemon.json <<EOF
@@ -32,22 +32,10 @@ else
     "max-size": "100m"
   },
   "storage-driver": "overlay2",
-  "storage-opts": [
-    "overlay2.override_kernel_check=true"
-  ]
-EOF
-    if [[ ! -z $XLN_DOCKER_MIRROR_REIGSTRY ]]
-    then
-      echo "exist"
-      cat >> /etc/docker/daemon.json <<EOF 
-  ,
-  "registry-mirrors": [$XLN_DOCKER_MIRROR_REIGSTRY]
-EOF
-    fi
-    cat >> /etc/docker/daemon.json <<EOF
+  "registry-mirrors": [$XLN_DOCKER_MIRROR_REGISTRY]
 }
 EOF
-    mkdir -p /etc/systemd/system/docker.service.d
+    #mkdir -p /etc/systemd/system/docker.service.d
 
     # Restart docker.
     systemctl daemon-reload
