@@ -18,7 +18,7 @@ else
         https://download.docker.com/linux/centos/docker-ce.repo
 
     ## Install docker ce.
-    yum -y update && sudo yum -y install docker-ce-3:24.0.5-1.el8 docker-ce-cli-3:24.0.5-1.el8 containerd.io docker-buildx-plugin docker-compose-plugin
+    yum -y update && sudo yum -y install docker-ce-3:24.0.5-1.el8 docker-ce-cli-1:24.0.5-1.el8 containerd.io docker-buildx-plugin docker-compose-plugin
 
     ## Create /etc/docker directory.
     mkdir /etc/docker
